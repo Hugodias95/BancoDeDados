@@ -47,6 +47,15 @@ public class ConsultorDAO implements IConsultorDAO {
     }
 
     @Override
+    public void deleteConsultor(Consultor pesssoa) throws Exception {
+        try {
+
+        }catch () {
+            
+        }
+    }
+
+    @Override
     public ArrayList<Consultor> listaDeConsultores() throws Exception {
         ArrayList<Consultor> listaDosConsultores = new ArrayList<Consultor>();
         String sql = "SELECT * FROM consultor";

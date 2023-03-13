@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public interface IConsultorDAO {
 
     void createConsultor(Consultor pessoa) throws Exception;
+
+    void deleteConsultor(Consultor pesssoa) throws Exception;
         
     ArrayList<Consultor> listaDeConsultores() throws Exception;
 }
