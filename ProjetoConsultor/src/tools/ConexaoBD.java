@@ -21,7 +21,7 @@ public class ConexaoBD {
         {
             if(conexao == null){
                 String driver = "org.postgresql.Driver";
-                String url = "jdbc:postgresql://localhost:5432/Consultores_BD";
+                String url = "jdbc:postgresql://localhost:5432/Projetos_DB";
                 String user = "postgres";
                 String password = "aluno"; 
                 Class.forName(driver);
