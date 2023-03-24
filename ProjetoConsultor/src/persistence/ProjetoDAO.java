@@ -17,7 +17,7 @@ public class ProjetoDAO implements IProjetoDAO{
     @Override
     public void cadastrarProjeto(Projeto projeto) throws Exception {
         try {
-            String sql = "INSERT INTO projeto VALUES (? , ?, ?)";
+            String sql = "INSERT INTO projetos VALUES (? , ?, ?)";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             // Parameters iniciar os elementos
             preparedStatement.setString(1, projeto.getDescricao());
@@ -34,7 +34,7 @@ public class ProjetoDAO implements IProjetoDAO{
     @Override
     public ArrayList<Projeto> listarProjetos() throws Exception{
         ArrayList<Projeto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM projeto";
+        String sql = "SELECT * FROM projetos";
 
         try {
             Statement statement = con.createStatement();
@@ -59,7 +59,7 @@ public class ProjetoDAO implements IProjetoDAO{
     @Override
     public void alterarProjeto(Projeto projeto) throws Exception {
         try{
-            String sql = "UPDATE projeto SET descricao = ?, endereco = ?, valor_projeto = ?  where id = ?";
+            String sql = "UPDATE projetos SET descricao = ?, endereco = ?, valor_projeto = ?  where id = ?";
             PreparedStatement prep = con.prepareStatement(sql);
 
             for(Projeto proj : listarProjetos()){
@@ -81,7 +81,7 @@ public class ProjetoDAO implements IProjetoDAO{
     @Override
     public void deletarProjeto(int id) throws Exception{
         try{
-            String sql = "DELETE FROM produto where id = ?";
+            String sql = "DELETE FROM projetos where id = ?";
             PreparedStatement prep = con.prepareStatement(sql);
             prep.setInt(1,id);
             prep.executeUpdate();
