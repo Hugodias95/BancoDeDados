@@ -13,6 +13,12 @@ public class Projeto {
     public Projeto() {
     }
 
+    public Projeto(String descricao, String endereco, float valorProjeto) {
+        this.descricao = descricao;
+        this.endereco = endereco;
+        this.valorProjeto = valorProjeto;
+    }
+
     public Projeto(int id, String descricao, String endereco, float valorProjeto) {
         this.id = id;
         this.descricao = descricao;

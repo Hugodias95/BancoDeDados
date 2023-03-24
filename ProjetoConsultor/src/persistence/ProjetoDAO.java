@@ -55,5 +55,13 @@ public class ProjetoDAO implements IProjetoDAO{
     }
 
 
+    public void alterarProjeto(Projeto projeto){
+        try{
+            ArrayList<Projeto> lista = listarProjetos();
+
+        }catch (Exception e){
+
+        }
+    }
 
 }
