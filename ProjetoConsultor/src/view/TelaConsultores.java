@@ -7,12 +7,12 @@ package view;
 import java.awt.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import model.Consultor;
 import persistence.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import model.Projeto;
 
 /**
  *
@@ -23,16 +23,15 @@ public class TelaConsultores extends javax.swing.JFrame {
     /**
      * Creates new form TelaConsultores
      */
-    IConsultorDAO consultorBD = null;
-    
+    IProjetoDAO consultorBD = null;
+
     public TelaConsultores() throws Exception {
         initComponents();
         setLocationRelativeTo(null);
-        
+
         //Carregar a grid
-        
-        consultorBD = new ConsultorDAO();
-        atualizarGrid(consultorBD.listaDeConsultores());
+        consultorBD = new ProjetoDAO();
+        atualizarGrid(consultorBD.listarProjetos());
     }
 
     /**
@@ -50,20 +49,25 @@ public class TelaConsultores extends javax.swing.JFrame {
         jPanelDadosBotoes = new javax.swing.JPanel();
         jLabelDadosConsultores = new javax.swing.JLabel();
         jLabelID = new javax.swing.JLabel();
-        jLabelNome = new javax.swing.JLabel();
-        jLabelEmail = new javax.swing.JLabel();
-        jTextFieldIDConsultor = new javax.swing.JTextField();
-        jTextFieldNome = new javax.swing.JTextField();
-        jTextFieldEmail = new javax.swing.JTextField();
+        jLabelDescricao = new javax.swing.JLabel();
+        jLabelEndereco = new javax.swing.JLabel();
+        jTextFieldID = new javax.swing.JTextField();
+        jTextFieldDescricao = new javax.swing.JTextField();
+        jTextFieldEndereco = new javax.swing.JTextField();
         jLabelAções = new javax.swing.JLabel();
         jButtonIncluir = new javax.swing.JButton();
+        jButtonAlterar = new javax.swing.JButton();
+        jButtonExcluir = new javax.swing.JButton();
+        jButtonConsultar = new javax.swing.JButton();
+        jLabelValorDoProjeto = new javax.swing.JLabel();
+        jTextFieldValorDoProjeto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableConsultor = new javax.swing.JTable();
+        jTableProjeto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jPanelFundo.setBackground(java.awt.Color.white);
+        jPanelFundo.setBackground(new java.awt.Color(0, 153, 200));
 
         jPanelTopo.setBackground(new java.awt.Color(0, 153, 200));
 
@@ -71,7 +75,7 @@ public class TelaConsultores extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Cadastro de consultores");
+        jLabel1.setText("Cadastro de Projeto");
 
         javax.swing.GroupLayout jPanelTopoLayout = new javax.swing.GroupLayout(jPanelTopo);
         jPanelTopo.setLayout(jPanelTopoLayout);
@@ -85,21 +89,33 @@ public class TelaConsultores extends javax.swing.JFrame {
         jPanelTopoLayout.setVerticalGroup(
             jPanelTopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelTopoLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jLabelDadosConsultores.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabelDadosConsultores.setText("Dados dos consultores");
+        jLabelDadosConsultores.setText("Dados dos Projeto");
 
-        jLabelID.setText("ID_CONSULTOR");
+        jLabelID.setText("ID");
 
-        jLabelNome.setText("NOME");
+        jLabelDescricao.setText("Descrição");
 
-        jLabelEmail.setText("EMAIL");
+        jLabelEndereco.setText("Endereço");
 
-        jTextFieldIDConsultor.setEditable(false);
+        jTextFieldID.setEditable(false);
+        jTextFieldID.setEnabled(false);
+        jTextFieldID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldIDActionPerformed(evt);
+            }
+        });
+
+        jTextFieldDescricao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDescricaoActionPerformed(evt);
+            }
+        });
 
         jLabelAções.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabelAções.setText("Ações");
@@ -111,71 +127,131 @@ public class TelaConsultores extends javax.swing.JFrame {
             }
         });
 
+        jButtonAlterar.setText("Alterar");
+        jButtonAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAlterarActionPerformed(evt);
+            }
+        });
+
+        jButtonExcluir.setText("Excluir");
+        jButtonExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirActionPerformed(evt);
+            }
+        });
+
+        jButtonConsultar.setText("Consultar");
+        jButtonConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConsultarActionPerformed(evt);
+            }
+        });
+
+        jLabelValorDoProjeto.setText("Valor do projeto R$:");
+
         javax.swing.GroupLayout jPanelDadosBotoesLayout = new javax.swing.GroupLayout(jPanelDadosBotoes);
         jPanelDadosBotoes.setLayout(jPanelDadosBotoesLayout);
         jPanelDadosBotoesLayout.setHorizontalGroup(
             jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDadosBotoesLayout.createSequentialGroup()
+            .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
                 .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabelDadosConsultores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                        .addGap(122, 122, 122)
+                        .addComponent(jLabelID)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
-                        .addGap(41, 41, 41)
+                        .addContainerGap()
+                        .addComponent(jLabelDadosConsultores, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
+                        .addGap(82, 82, 82)
                         .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelEmail)
-                            .addComponent(jLabelNome)
-                            .addComponent(jLabelID))
+                            .addComponent(jLabelDescricao)
+                            .addComponent(jLabelEndereco))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldIDConsultor, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNome)
-                            .addComponent(jTextFieldEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelAções, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldDescricao)
+                            .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
-                        .addComponent(jButtonIncluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabelValorDoProjeto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldValorDoProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonConsultar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelAções, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonIncluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelDadosBotoesLayout.setVerticalGroup(
             jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelDadosConsultores)
                     .addComponent(jLabelAções))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelID)
-                    .addComponent(jTextFieldIDConsultor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonIncluir))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelNome)
-                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(33, 33, 33)
                 .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelEmail)
-                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
+                        .addComponent(jButtonIncluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonAlterar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonConsultar))
+                    .addGroup(jPanelDadosBotoesLayout.createSequentialGroup()
+                        .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelID)
+                            .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelDescricao)
+                            .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelEndereco))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelValorDoProjeto)
+                            .addComponent(jTextFieldValorDoProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
-        jTableConsultor.setModel(new javax.swing.table.DefaultTableModel(
+        jTableProjeto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "IDENTIFICADOR", "NOME", "EMAIL"
+                "IDENTIFICADOR", "DESCRIÇÃO", "ENDEREÇO", "VALOR"
             }
-        ));
-        jTableConsultor.setToolTipText("");
-        jTableConsultor.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jScrollPane1.setViewportView(jTableConsultor);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableProjeto.setToolTipText("");
+        jTableProjeto.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTableProjeto.setColumnSelectionAllowed(true);
+        jTableProjeto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTableProjeto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableProjetoMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableProjeto);
 
         javax.swing.GroupLayout jPanelFundoLayout = new javax.swing.GroupLayout(jPanelFundo);
         jPanelFundo.setLayout(jPanelFundoLayout);
@@ -192,7 +268,8 @@ public class TelaConsultores extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelDadosBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -203,28 +280,31 @@ public class TelaConsultores extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelFundo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelFundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void limparTela() {
-        jTextFieldIDConsultor.setText("");
-        jTextFieldNome.setText("");
-        jTextFieldEmail.setText("");
+        jTextFieldID.setText("");
+        jTextFieldDescricao.setText("");
+        jTextFieldEndereco.setText("");
+        jTextFieldValorDoProjeto.setText("");
     }
 
-    private void atualizarGrid(ArrayList<Consultor> listaDeConsultores) {
+    private void atualizarGrid(ArrayList<Projeto> listaDeConsultores) {
         try {
-            DefaultTableModel model = (DefaultTableModel) jTableConsultor.getModel();
+            DefaultTableModel model = (DefaultTableModel) jTableProjeto.getModel();
             model.setNumRows(0);
             for (int pos = 0; pos < listaDeConsultores.size(); pos++) {
-                Consultor pessoa = listaDeConsultores.get(pos);
-                String[] linha = new String[3];
-                linha[0] = pessoa.getIdConsultor() + "";
-                linha[1] = pessoa.getNome();
-                linha[2] = pessoa.getEmail();
+                Projeto pessoa = listaDeConsultores.get(pos);
+                String[] linha = new String[4];
+                linha[0] = pessoa.getId() + "";
+                linha[1] = pessoa.getDescricao();
+                linha[2] = pessoa.getEndereco();
+                linha[3] = pessoa.getValorProjeto() + "";
+
                 model.addRow(linha);
             }
             //JOptionPane.showMessageDialog(rootPane, dadosDosProfessores.toString());
@@ -237,17 +317,16 @@ public class TelaConsultores extends javax.swing.JFrame {
     private void jButtonIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirActionPerformed
         try {
 
-            Consultor pessoa = null;
-            pessoa = new Consultor(0, jTextFieldNome.getText(), jTextFieldEmail.getText());
+            Projeto proj = null;
+            proj = new Projeto(jTextFieldDescricao.getText(), jTextFieldEndereco.getText(), Float.parseFloat(jTextFieldValorDoProjeto.getText()));
 
             //Instância interface pois ela define apenas os serviços, que serão utilizados
-            
-            consultorBD = new ConsultorDAO();
-            consultorBD.createConsultor(pessoa);
+            consultorBD = new ProjetoDAO();
+            consultorBD.cadastrarProjeto(proj);
 
             JOptionPane.showMessageDialog(this, "Consultor inserido com sucesso");
 
-            atualizarGrid(consultorBD.listaDeConsultores());
+            atualizarGrid(consultorBD.listarProjetos());
             limparTela();
 
         } catch (Exception erro) {
@@ -256,6 +335,79 @@ public class TelaConsultores extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jButtonIncluirActionPerformed
+
+    private void jTextFieldIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldIDActionPerformed
+
+    private void jTextFieldDescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDescricaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDescricaoActionPerformed
+
+    private void jTableProjetoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProjetoMouseClicked
+
+        this.jTextFieldID.setText((String) this.jTableProjeto.getValueAt(jTableProjeto.getSelectedRow(), 0));
+        this.jTextFieldDescricao.setText((String) this.jTableProjeto.getValueAt(jTableProjeto.getSelectedRow(), 1));
+        this.jTextFieldEndereco.setText((String) this.jTableProjeto.getValueAt(jTableProjeto.getSelectedRow(), 2));
+        this.jTextFieldValorDoProjeto.setText((String) this.jTableProjeto.getValueAt(jTableProjeto.getSelectedRow(), 3));
+
+
+    }//GEN-LAST:event_jTableProjetoMouseClicked
+
+    private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
+        try {
+
+            Projeto proj = null;
+            proj = new Projeto(Integer.parseInt(jTextFieldID.getText()), jTextFieldDescricao.getText(), jTextFieldEndereco.getText(), Float.parseFloat(jTextFieldValorDoProjeto.getText()));
+
+            consultorBD = new ProjetoDAO();
+
+            consultorBD.alterarProjeto(proj);
+
+            limparTela();
+            atualizarGrid(consultorBD.listarProjetos());
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+    }//GEN-LAST:event_jButtonAlterarActionPerformed
+
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+
+        try {
+
+            int id = Integer.parseInt(jTextFieldID.getText());
+
+            consultorBD = new ProjetoDAO();
+
+            consultorBD.deletarProjeto(id);
+            limparTela();
+            atualizarGrid(consultorBD.listarProjetos());
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+
+
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
+    private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
+
+        try {
+
+            consultorBD = new ProjetoDAO();
+
+            limparTela();
+            atualizarGrid(consultorBD.listarProjetos());
+            
+            JOptionPane.showMessageDialog(rootPane, "Lista atualizada!");
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        }
+
+
+    }//GEN-LAST:event_jButtonConsultarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,21 +449,26 @@ public class TelaConsultores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAlterar;
+    private javax.swing.JButton jButtonConsultar;
+    private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonIncluir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAções;
     private javax.swing.JLabel jLabelDadosConsultores;
-    private javax.swing.JLabel jLabelEmail;
+    private javax.swing.JLabel jLabelDescricao;
+    private javax.swing.JLabel jLabelEndereco;
     private javax.swing.JLabel jLabelID;
-    private javax.swing.JLabel jLabelNome;
+    private javax.swing.JLabel jLabelValorDoProjeto;
     private javax.swing.JPanel jPanelDadosBotoes;
     private javax.swing.JPanel jPanelFundo;
     private javax.swing.JPanel jPanelTopo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableConsultor;
-    private javax.swing.JTextField jTextFieldEmail;
-    private javax.swing.JTextField jTextFieldIDConsultor;
-    private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTable jTableProjeto;
+    private javax.swing.JTextField jTextFieldDescricao;
+    private javax.swing.JTextField jTextFieldEndereco;
+    private javax.swing.JTextField jTextFieldID;
+    private javax.swing.JTextField jTextFieldValorDoProjeto;
     // End of variables declaration//GEN-END:variables
 
 }

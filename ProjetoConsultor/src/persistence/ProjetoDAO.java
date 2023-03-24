@@ -17,9 +17,10 @@ public class ProjetoDAO implements IProjetoDAO{
     @Override
     public void cadastrarProjeto(Projeto projeto) throws Exception {
         try {
-            String sql = "INSERT INTO projetos VALUES (? , ?, ?)";
+            String sql = "INSERT INTO projetos (descricao,endereco,valor_projeto) VALUES (? , ?, ?)";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             // Parameters iniciar os elementos
+            //preparedStatement.setInt(1, projeto.getId());
             preparedStatement.setString(1, projeto.getDescricao());
             preparedStatement.setString(2, projeto.getEndereco());
             preparedStatement.setFloat(3, projeto.getValorProjeto());
