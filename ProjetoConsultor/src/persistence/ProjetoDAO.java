@@ -25,10 +25,9 @@ public class ProjetoDAO implements IProjetoDAO{
             preparedStatement.setFloat(3, projeto.getValorProjeto());
             preparedStatement.executeUpdate();
         } catch (SQLException erro) {
-            //Erro do comando SQL - chave, coluna, nome da tabela, ...
-            throw new Exception("SQL Erro: " + erro.getMessage());
-        } catch (Exception erro) {
-            throw erro;
+            throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
+        } catch (Exception e) {
+            throw new Exception("Nao foi possível obter a lista de projetos : "+e.getMessage());
         }
     }
 
@@ -48,19 +47,48 @@ public class ProjetoDAO implements IProjetoDAO{
                 proj.setValorProjeto(rs.getFloat("valor_projeto"));
                 lista.add(proj);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException erro) {
+            throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
+        } catch (Exception e) {
+            throw new Exception("Nao foi possível obter a lista de projetos : "+e.getMessage());
         }
+
         return lista;
     }
 
-
-    public void alterarProjeto(Projeto projeto){
+    @Override
+    public void alterarProjeto(Projeto projeto) throws Exception {
         try{
-            ArrayList<Projeto> lista = listarProjetos();
+            String sql = "UPDATE projeto SET descricao = ?, endereco = ?, valor_projeto = ?  where id = ?";
+            PreparedStatement prep = con.prepareStatement(sql);
 
+            for(Projeto proj : listarProjetos()){
+                if (proj.getId() == projeto.getId()){
+                    prep.setString(1,projeto.getDescricao());
+                    prep.setString(2,projeto.getEndereco());
+                    prep.setFloat(3,projeto.getValorProjeto());
+                    prep.setInt(4,proj.getId());
+                    prep.executeUpdate();
+                }
+            }
+        } catch (SQLException erro) {
+            throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
         }catch (Exception e){
+            throw new Exception("Nao foi possível alterar o projeto Id: "+projeto.getId()+" : "+e.getMessage());
+        }
+    }
 
+    @Override
+    public void deletarProjeto(int id) throws Exception{
+        try{
+            String sql = "DELETE FROM produto where id = ?";
+            PreparedStatement prep = con.prepareStatement(sql);
+            prep.setInt(1,id);
+            prep.executeUpdate();
+        } catch (SQLException erro) {
+            throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
+        } catch (Exception e){
+            throw new Exception("Nao foi possível deletar o projeto Id: "+id+" : "+e.getMessage());
         }
     }
 
