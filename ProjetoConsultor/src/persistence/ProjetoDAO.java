@@ -62,16 +62,12 @@ public class ProjetoDAO implements IProjetoDAO{
         try{
             String sql = "UPDATE projetos SET descricao = ?, endereco = ?, valor_projeto = ?  where id = ?";
             PreparedStatement prep = con.prepareStatement(sql);
-
-            for(Projeto proj : listarProjetos()){
-                if (proj.getId() == projeto.getId()){
-                    prep.setString(1,projeto.getDescricao());
-                    prep.setString(2,projeto.getEndereco());
-                    prep.setFloat(3,projeto.getValorProjeto());
-                    prep.setInt(4,proj.getId());
-                    prep.executeUpdate();
-                }
-            }
+            prep.setString(1,projeto.getDescricao());
+            prep.setString(2,projeto.getEndereco());
+            prep.setFloat(3,projeto.getValorProjeto());
+            prep.setInt(4,projeto.getId());
+            prep.executeUpdate();
+            
         } catch (SQLException erro) {
             throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
         }catch (Exception e){

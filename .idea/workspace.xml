@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9754fc09-2aa9-4df4-b8b3-49ffd837c0ad" name="Changes" comment="" />
+    <list default="true" id="9754fc09-2aa9-4df4-b8b3-49ffd837c0ad" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/ProjetoConsultor/src/persistence/ProjetoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetoConsultor/src/persistence/ProjetoDAO.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,6 +39,9 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "aspect.path.notification.shown": "true",
+    "last_opened_file_path": "C:/JavaProjects/BancoDeDados",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0"
@@ -55,7 +60,22 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1679695657695</updated>
+      <workItem from="1679760503967" duration="456000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
