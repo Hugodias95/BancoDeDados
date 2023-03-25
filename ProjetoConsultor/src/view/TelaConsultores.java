@@ -4,8 +4,6 @@
  */
 package view;
 
-import java.awt.List;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import persistence.*;
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import model.Projeto;
+import tools.*;
 
 /**
  *
@@ -106,8 +105,6 @@ public class TelaConsultores extends javax.swing.JFrame {
 
         jLabelEndereco.setText("Endereço");
 
-        jTextFieldID.setEditable(false);
-        jTextFieldID.setEnabled(false);
         jTextFieldID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldIDActionPerformed(evt);
@@ -188,7 +185,7 @@ public class TelaConsultores extends javax.swing.JFrame {
                     .addComponent(jButtonIncluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
         jPanelDadosBotoesLayout.setVerticalGroup(
             jPanelDadosBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,10 +287,10 @@ public class TelaConsultores extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void limparTela() {
-        jTextFieldID.setText("");
-        jTextFieldDescricao.setText("");
-        jTextFieldEndereco.setText("");
-        jTextFieldValorDoProjeto.setText("");
+        jTextFieldID.setText(null);
+        jTextFieldDescricao.setText(null);
+        jTextFieldEndereco.setText(null);
+        jTextFieldValorDoProjeto.setText(null);
     }
 
     private void atualizarGrid(ArrayList<Projeto> listaDeConsultores) {
@@ -321,13 +318,28 @@ public class TelaConsultores extends javax.swing.JFrame {
         try {
 
             Projeto proj = null;
-            proj = new Projeto(jTextFieldDescricao.getText(), jTextFieldEndereco.getText(), Float.parseFloat(jTextFieldValorDoProjeto.getText()));
+            String descricao = jTextFieldDescricao.getText();
+            String endereco = jTextFieldEndereco.getText();
+            
+            if (descricao.equals("")){
+                throw new Exception("Descricao do projeto é um campo obrigatório a ser preenchido");
+            }
+            if (endereco.equals("")){
+                throw new Exception("Endereco do projeto é um campo obrigatório a ser preenchido");
+            }
+            if (jTextFieldValorDoProjeto.getText().equals("")){
+                throw new Exception("Valor do projeto é um campo obrigatório a ser preenchido");
+            }
+            
+            float valorProjeto = Float.parseFloat(jTextFieldValorDoProjeto.getText());
+            
+            proj = new Projeto(descricao, endereco, valorProjeto);
 
             //Instância interface pois ela define apenas os serviços, que serão utilizados
             consultorBD = new ProjetoDAO();
             consultorBD.cadastrarProjeto(proj);
 
-            JOptionPane.showMessageDialog(this, "Consultor inserido com sucesso");
+            JOptionPane.showMessageDialog(this, "Projeto inserido com sucesso");
 
             atualizarGrid(consultorBD.listarProjetos());
             limparTela();
@@ -360,8 +372,15 @@ public class TelaConsultores extends javax.swing.JFrame {
     private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
         try {
 
+            temCamposVazios();
+            
             Projeto proj = null;
-            proj = new Projeto(Integer.parseInt(jTextFieldID.getText()), jTextFieldDescricao.getText(), jTextFieldEndereco.getText(), Float.parseFloat(jTextFieldValorDoProjeto.getText()));
+            String descricao = jTextFieldDescricao.getText();
+            String endereco = jTextFieldEndereco.getText();
+            float valorProjeto = Float.parseFloat(jTextFieldValorDoProjeto.getText());
+            int id = Integer.parseInt(jTextFieldID.getText());
+            
+            proj = new Projeto(id, descricao, endereco, valorProjeto);
 
             consultorBD = new ProjetoDAO();
 
@@ -369,6 +388,7 @@ public class TelaConsultores extends javax.swing.JFrame {
 
             limparTela();
             atualizarGrid(consultorBD.listarProjetos());
+            JOptionPane.showMessageDialog(this, "Projeto alterado com sucesso");
 
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
@@ -378,7 +398,9 @@ public class TelaConsultores extends javax.swing.JFrame {
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
 
         try {
-
+            
+            temCamposVazios();            
+            
             int id = Integer.parseInt(jTextFieldID.getText());
 
             consultorBD = new ProjetoDAO();
@@ -386,7 +408,9 @@ public class TelaConsultores extends javax.swing.JFrame {
             consultorBD.deletarProjeto(id);
             limparTela();
             atualizarGrid(consultorBD.listarProjetos());
-
+               
+            JOptionPane.showMessageDialog(this, "Projeto excluido com sucesso");
+            
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         }
@@ -400,18 +424,44 @@ public class TelaConsultores extends javax.swing.JFrame {
 
             consultorBD = new ProjetoDAO();
 
-            limparTela();
-            atualizarGrid(consultorBD.listarProjetos());
+            int id = jTextFieldID.getText().equals("") ? 0 : Integer.parseInt(jTextFieldID.getText());
+            float valor = jTextFieldValorDoProjeto.getText().equals("")? 0.0F : Float.parseFloat(jTextFieldValorDoProjeto.getText());
             
-            JOptionPane.showMessageDialog(rootPane, "Lista atualizada!");
+            Projeto proj = null;
+            proj = new Projeto( id, 
+                    jTextFieldDescricao.getText(), 
+                    jTextFieldEndereco.getText(), 
+                    valor);
+            
+            ArrayList<Projeto> lista = consultorBD.consultarProjeto(proj);
+
+            atualizarGrid(lista);
+            
+            JOptionPane.showMessageDialog(rootPane, "Consulta realizada com sucesso!\n"+lista.size()+" resultados encontrados");
 
         } catch (Exception erro) {
-            JOptionPane.showMessageDialog(this, erro.getMessage());
+            JOptionPane.showMessageDialog(this, erro);
         }
 
 
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 
+    
+    public void temCamposVazios() throws Exception{
+        if(jTextFieldID.getText().equals("")){
+            throw new Exception("ID do projeto é um campo obrigatório a ser preenchido");
+        }
+        if (jTextFieldDescricao.getText().equals("")){
+            throw new Exception("Descricao do projeto é um campo obrigatório a ser preenchido");
+        }
+        if (jTextFieldEndereco.getText().equals("")){
+            throw new Exception("Endereco do projeto é um campo obrigatório a ser preenchido");
+        }
+        if (jTextFieldValorDoProjeto.getText().equals("")){
+            throw new Exception("Valor do projeto é um campo obrigatório a ser preenchido");
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

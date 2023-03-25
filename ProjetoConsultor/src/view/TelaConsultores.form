@@ -152,7 +152,7 @@
                           <Component id="jButtonAlterar" max="32767" attributes="0"/>
                           <Component id="jButtonExcluir" alignment="0" min="-2" pref="178" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="134" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -227,10 +227,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldID">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldIDActionPerformed"/>
               </Events>
