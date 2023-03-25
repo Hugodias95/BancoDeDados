@@ -36,7 +36,7 @@ public class ProjetoDAO implements IProjetoDAO{
     @Override
     public ArrayList<Projeto> listarProjetos() throws Exception{
         ArrayList<Projeto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM projetos";
+        String sql = "SELECT * FROM projetos order by id";
 
         try {
             Statement statement = con.createStatement();
@@ -67,8 +67,11 @@ public class ProjetoDAO implements IProjetoDAO{
             prep.setString(2,projeto.getEndereco());
             prep.setFloat(3,projeto.getValorProjeto());
             prep.setInt(4,projeto.getId());
-            prep.executeUpdate();
-
+            int cont = prep.executeUpdate();
+            
+            if (cont == 0){
+                throw new Exception ("Não houve nenhuma alteração");
+            }
         } catch (SQLException erro) {
             throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
         }catch (Exception e){
@@ -92,38 +95,44 @@ public class ProjetoDAO implements IProjetoDAO{
 
 
     @Override
-    public List<Projeto> consultarProjeto(Projeto projeto) throws Exception{
+    public ArrayList<Projeto> consultarProjeto(Projeto projeto) throws Exception{
         try{
-            List<Projeto> lista = new ArrayList<Projeto>();
-            String sql = "SELECT * FROM tabela WHERE 1=1 ";
+            ArrayList<Projeto> lista = new ArrayList<Projeto>();
+            String sql = "SELECT * FROM projetos WHERE 1=1 ";
             int index = 1;
 
-            if(projeto.getId() != null || projeto.getId() > 0){
+            if(projeto.getId() > 0){
                 sql += " AND id = ? ";
             }
-            if(projeto.getDescricao() != null){
+            if(!(projeto.getDescricao().equals(""))){
                 sql += " AND descricao = ? ";
             }
-            if(projeto.getEndereco() != null){
+            if(!(projeto.getEndereco().equals(""))){
                 sql += " AND endereco = ? ";
             }
-            if(projeto.getValorProjeto() != null){
+            if(projeto.getValorProjeto()  > 0F){
                 sql += " AND valor_projeto = ? ";
             }
 
+            sql += "order by id";
+            
             PreparedStatement prep = con.prepareStatement(sql);
 
-            if(projeto.getId() != null || projeto.getId() > 0){
-                prep.setInt(index++, projeto.getId());
+            if(projeto.getId() > 0){
+                prep.setInt(index, projeto.getId());
+                index++;
             }
-            if(projeto.getDescricao() != null){
-                prep.setString(index++, projeto.getDescricao());
+            if(!(projeto.getDescricao().equals(""))){
+                prep.setString(index, projeto.getDescricao());
+                index++;
             }
-            if(projeto.getEndereco() != null){
-                prep.setString(index++, projeto.getEndereco());
+            if(!(projeto.getEndereco().equals(""))){
+                prep.setString(index, projeto.getEndereco());
+                index++;
             }
-            if (projeto.getValorProjeto() != null){
-                prep.setFloat(index++, projeto.getValorProjeto());
+            if (projeto.getValorProjeto()  > 0F){
+                prep.setFloat(index, projeto.getValorProjeto());
+                index++;
             }
 
             ResultSet rs = prep.executeQuery();

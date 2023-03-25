@@ -28,7 +28,10 @@ public class TelaConsultores extends javax.swing.JFrame {
     public TelaConsultores() throws Exception {
         initComponents();
         setLocationRelativeTo(null);
-
+        
+        jTextFieldID.setDocument(new NumericoIntUtil());
+        jTextFieldValorDoProjeto.setDocument(new NumericoFloatUtil());
+        
         //Carregar a grid
         consultorBD = new ProjetoDAO();
         atualizarGrid(consultorBD.listarProjetos());
