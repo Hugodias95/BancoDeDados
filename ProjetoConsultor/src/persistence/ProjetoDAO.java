@@ -5,6 +5,7 @@ import tools.ConexaoBD;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProjetoDAO implements IProjetoDAO{
 
@@ -67,7 +68,7 @@ public class ProjetoDAO implements IProjetoDAO{
             prep.setFloat(3,projeto.getValorProjeto());
             prep.setInt(4,projeto.getId());
             prep.executeUpdate();
-            
+
         } catch (SQLException erro) {
             throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
         }catch (Exception e){
@@ -89,4 +90,58 @@ public class ProjetoDAO implements IProjetoDAO{
         }
     }
 
+
+    @Override
+    public List<Projeto> consultarProjeto(Projeto projeto) throws Exception{
+        try{
+            List<Projeto> lista = new ArrayList<Projeto>();
+            String sql = "SELECT * FROM tabela WHERE 1=1 ";
+            int index = 1;
+
+            if(projeto.getId() != null || projeto.getId() > 0){
+                sql += " AND id = ? ";
+            }
+            if(projeto.getDescricao() != null){
+                sql += " AND descricao = ? ";
+            }
+            if(projeto.getEndereco() != null){
+                sql += " AND endereco = ? ";
+            }
+            if(projeto.getValorProjeto() != null){
+                sql += " AND valor_projeto = ? ";
+            }
+
+            PreparedStatement prep = con.prepareStatement(sql);
+
+            if(projeto.getId() != null || projeto.getId() > 0){
+                prep.setInt(index++, projeto.getId());
+            }
+            if(projeto.getDescricao() != null){
+                prep.setString(index++, projeto.getDescricao());
+            }
+            if(projeto.getEndereco() != null){
+                prep.setString(index++, projeto.getEndereco());
+            }
+            if (projeto.getValorProjeto() != null){
+                prep.setFloat(index++, projeto.getValorProjeto());
+            }
+
+            ResultSet rs = prep.executeQuery();
+
+            while (rs.next()) {
+                Projeto proj = new Projeto();
+                proj.setId(rs.getInt("id"));
+                proj.setDescricao(rs.getString("descricao"));
+                proj.setEndereco(rs.getString("endereco"));
+                proj.setValorProjeto(rs.getFloat("valor_projeto"));
+                lista.add(proj);
+            }
+
+            return lista;
+        }catch (SQLException erro){
+            throw new Exception("Ocorreu um erro ao executar o SQL: " + erro.getMessage());
+        }catch (Exception e){
+            throw new Exception("Nao foi possível realizar a consulta: "+e.getMessage());
+        }
+    }
 }
